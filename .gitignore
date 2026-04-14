@@ -1,0 +1,14 @@
+/target/
+**/*.rs.bk
+.DS_Store
+.vscode/
+.idea/
+*.iml
+*.log
+*.tmp
+*.temp
+*.backup
+*.bak
+*.swp
+*.swo
+*~
