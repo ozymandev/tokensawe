@@ -1,0 +1,14 @@
+/home/container/.openclaw/workspace/ztk-rust/target/release/deps/serde-fad138cb2d1b842c.d: /home/container/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/container/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/container/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/container/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/container/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /home/container/.openclaw/workspace/ztk-rust/target/release/build/serde-2bd0a7e82b312b43/out/private.rs
+
+/home/container/.openclaw/workspace/ztk-rust/target/release/deps/libserde-fad138cb2d1b842c.rlib: /home/container/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/container/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/container/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/container/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/container/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /home/container/.openclaw/workspace/ztk-rust/target/release/build/serde-2bd0a7e82b312b43/out/private.rs
+
+/home/container/.openclaw/workspace/ztk-rust/target/release/deps/libserde-fad138cb2d1b842c.rmeta: /home/container/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/container/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/container/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/container/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/container/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /home/container/.openclaw/workspace/ztk-rust/target/release/build/serde-2bd0a7e82b312b43/out/private.rs
+
+/home/container/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs:
+/home/container/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs:
+/home/container/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs:
+/home/container/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs:
+/home/container/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs:
+/home/container/.openclaw/workspace/ztk-rust/target/release/build/serde-2bd0a7e82b312b43/out/private.rs:
+
+# env-dep:OUT_DIR=/home/container/.openclaw/workspace/ztk-rust/target/release/build/serde-2bd0a7e82b312b43/out
