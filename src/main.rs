@@ -1,5 +1,5 @@
 use std::process::ExitCode;
-use clap::{Parser, Subcommand};
+use clap::{CommandFactory, Parser, Subcommand};
 
 mod proxy;
 mod stats;
@@ -23,9 +23,23 @@ enum Commands {
     /// Install Claude Code PreToolUse hook
     Init {
         /// Install globally (affects all users)
-        #[arg(long)]
+        #[arg(long, short = 'g')]
         global: bool,
     },
+    /// Add filter/session settings to a config file
+    Add {
+        /// Config file to update
+        #[arg(value_name = "FILE")]
+        file: String,
+    },
+    /// Remove filter/session settings from a config file
+    Rm {
+        /// Config file to update
+        #[arg(value_name = "FILE")]
+        file: String,
+    },
+    /// Print usage/help text
+    Usage,
     /// PreToolUse hook handler (reads stdin)
     Rewrite,
     /// Print savings stats
@@ -40,6 +54,13 @@ fn main() -> ExitCode {
     match cli.command {
         Commands::Run { cmd } => proxy::run_proxy(&cmd),
         Commands::Init { global } => hooks::run_init(global),
+        Commands::Add { file } => hooks::run_add(&file),
+        Commands::Rm { file } => hooks::run_rm(&file),
+        Commands::Usage => {
+            Cli::command().print_help().ok();
+            println!();
+            ExitCode::SUCCESS
+        }
         Commands::Rewrite => hooks::run_rewrite(),
         Commands::Stats => stats::run_stats(),
         Commands::Version => {
