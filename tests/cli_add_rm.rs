@@ -68,3 +68,25 @@ fn usage_command_prints_add_and_rm_help() {
     assert!(stdout.contains("Remove filter/session settings from a config file"));
     assert!(stdout.contains("Usage:"));
 }
+
+#[test]
+fn help_command_matches_usage_alias_output() {
+    let usage = Command::new(bin()).arg("usage").output().unwrap();
+    let help = Command::new(bin()).arg("help").output().unwrap();
+
+    assert!(usage.status.success());
+    assert!(help.status.success());
+
+    let usage_stdout = String::from_utf8_lossy(&usage.stdout);
+    let help_stdout = String::from_utf8_lossy(&help.stdout);
+    assert_eq!(help_stdout.trim_end(), usage_stdout.trim_end());
+}
+
+#[test]
+fn version_command_prints_crate_version() {
+    let output = Command::new(bin()).arg("version").output().unwrap();
+    assert!(output.status.success());
+
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    assert_eq!(stdout.trim(), format!("tokensawe {}", env!("CARGO_PKG_VERSION")));
+}
