@@ -90,3 +90,31 @@ fn version_command_prints_crate_version() {
     let stdout = String::from_utf8_lossy(&output.stdout);
     assert_eq!(stdout.trim(), format!("tokensawe {}", env!("CARGO_PKG_VERSION")));
 }
+
+#[test]
+fn rm_command_is_idempotent_when_block_missing() {
+    let path = temp_path("rm-missing-cli");
+    fs::write(&path, "before = true\nafter = true\n").unwrap();
+
+    let output = Command::new(bin()).arg("rm").arg(&path).output().unwrap();
+    assert!(output.status.success());
+
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    assert!(stdout.contains("managed settings not present"));
+
+    let content = fs::read_to_string(&path).unwrap();
+    assert_eq!(content, "before = true\nafter = true\n");
+}
+
+#[test]
+fn add_command_preserves_existing_content_without_trailing_newline() {
+    let path = temp_path("add-no-trailing-newline-cli");
+    fs::write(&path, "name = \"demo\"").unwrap();
+
+    let output = Command::new(bin()).arg("add").arg(&path).output().unwrap();
+    assert!(output.status.success());
+
+    let content = fs::read_to_string(&path).unwrap();
+    assert!(content.starts_with("name = \"demo\"\n# ztk managed start\n"));
+    assert_eq!(content.matches("# ztk managed start").count(), 1);
+}
