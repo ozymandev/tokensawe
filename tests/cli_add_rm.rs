@@ -118,3 +118,29 @@ fn add_command_preserves_existing_content_without_trailing_newline() {
     assert!(content.starts_with("name = \"demo\"\n# ztk managed start\n"));
     assert_eq!(content.matches("# ztk managed start").count(), 1);
 }
+
+#[test]
+fn add_command_creates_missing_file_with_single_managed_block() {
+    let path = temp_path("add-missing-file-cli");
+    if path.exists() {
+        fs::remove_file(&path).unwrap();
+    }
+
+    let first = Command::new(bin()).arg("add").arg(&path).output().unwrap();
+    assert!(first.status.success());
+    let first_stdout = String::from_utf8_lossy(&first.stdout);
+    assert!(first_stdout.contains("added managed settings"));
+
+    let content = fs::read_to_string(&path).unwrap();
+    assert_eq!(content.matches("# ztk managed start").count(), 1);
+    assert!(content.starts_with("# ztk managed start\n[ztk]\n"));
+    assert!(content.ends_with("# ztk managed end\n"));
+
+    let second = Command::new(bin()).arg("add").arg(&path).output().unwrap();
+    assert!(second.status.success());
+    let second_stdout = String::from_utf8_lossy(&second.stdout);
+    assert!(second_stdout.contains("already present"));
+
+    let content = fs::read_to_string(&path).unwrap();
+    assert_eq!(content.matches("# ztk managed start").count(), 1);
+}
