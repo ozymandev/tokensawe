@@ -144,3 +144,35 @@ fn add_command_creates_missing_file_with_single_managed_block() {
     let content = fs::read_to_string(&path).unwrap();
     assert_eq!(content.matches("# ztk managed start").count(), 1);
 }
+
+#[test]
+fn rm_command_removes_managed_block_at_start_of_file() {
+    let path = temp_path("rm-start-cli");
+    fs::write(
+        &path,
+        "# ztk managed start\n[ztk]\nenabled = true\nsession_ttl_secs = 30\n# ztk managed end\nafter = true\n",
+    )
+    .unwrap();
+
+    let output = Command::new(bin()).arg("rm").arg(&path).output().unwrap();
+    assert!(output.status.success());
+
+    let content = fs::read_to_string(&path).unwrap();
+    assert_eq!(content, "after = true\n");
+}
+
+#[test]
+fn rm_command_removes_managed_block_in_middle_without_extra_blank_lines() {
+    let path = temp_path("rm-middle-cli");
+    fs::write(
+        &path,
+        "before = true\n\n# ztk managed start\n[ztk]\nenabled = true\nsession_ttl_secs = 30\n# ztk managed end\n\nafter = true\n",
+    )
+    .unwrap();
+
+    let output = Command::new(bin()).arg("rm").arg(&path).output().unwrap();
+    assert!(output.status.success());
+
+    let content = fs::read_to_string(&path).unwrap();
+    assert_eq!(content, "before = true\n\nafter = true\n");
+}
