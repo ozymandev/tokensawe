@@ -17,6 +17,16 @@ fn temp_path(label: &str) -> PathBuf {
     path
 }
 
+fn temp_home_dir(label: &str) -> PathBuf {
+    let mut path = std::env::temp_dir();
+    let nanos = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap()
+        .as_nanos();
+    path.push(format!("tokensawe-{label}-{nanos}"));
+    path
+}
+
 #[test]
 fn add_command_updates_file_and_is_idempotent() {
     let path = temp_path("add-cli");
@@ -89,6 +99,53 @@ fn version_command_prints_crate_version() {
 
     let stdout = String::from_utf8_lossy(&output.stdout);
     assert_eq!(stdout.trim(), format!("tokensawe {}", env!("CARGO_PKG_VERSION")));
+}
+
+#[test]
+fn stats_command_reports_no_log_yet_when_savings_log_missing() {
+    let temp_home = temp_home_dir("stats-missing-log-cli");
+
+    let output = Command::new(bin())
+        .arg("stats")
+        .env("HOME", &temp_home)
+        .output()
+        .unwrap();
+    assert!(output.status.success());
+
+    let stderr = String::from_utf8_lossy(&output.stderr);
+    assert!(stderr.contains("no savings log yet"));
+}
+
+#[test]
+fn stats_command_summarizes_existing_savings_log() {
+    let temp_home = temp_home_dir("stats-existing-log-cli");
+    let log_dir = temp_home.join(".local/share/ztk");
+    fs::create_dir_all(&log_dir).unwrap();
+    fs::write(
+        log_dir.join("savings.log"),
+        concat!(
+            "1\tgit diff --cached\t100\t40\t60%\texit=0\n",
+            "2\tgit diff HEAD\t70\t20\t71%\texit=0\n",
+            "3\tcargo test\t200\t120\t40%\texit=0\n",
+        ),
+    )
+    .unwrap();
+
+    let output = Command::new(bin())
+        .arg("stats")
+        .env("HOME", &temp_home)
+        .output()
+        .unwrap();
+    assert!(output.status.success());
+
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    assert!(stdout.contains("ztk savings"));
+    assert!(stdout.contains("Commands run : 3"));
+    assert!(stdout.contains("Original     : 370 bytes"));
+    assert!(stdout.contains("Filtered     : 180 bytes"));
+    assert!(stdout.contains("Saved        : 190 bytes (51%)"));
+    assert!(stdout.contains("- git diff: 2 runs, saved 110 bytes (64%)"));
+    assert!(stdout.contains("- cargo test: 1 runs, saved 80 bytes (40%)"));
 }
 
 #[test]
